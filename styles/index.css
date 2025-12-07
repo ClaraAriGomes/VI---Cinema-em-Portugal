@@ -1,7 +1,12 @@
+@font-face {
+  font-family: title;
+  src: url("/fonts/Limelight-Regular.ttf");
+}
 body {
   background-color: #292929;
 }
 body h1 {
+  font-family: title;
   height: 100vh;
   color: whitesmoke;
 }

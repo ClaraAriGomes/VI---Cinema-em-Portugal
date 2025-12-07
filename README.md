@@ -5,9 +5,10 @@
 Abrir o terminal e escrever:
 npm i
 
-## 2º Passo
-Para fazer o css:
+## 2º Passo - instalar SASS
+npm i -g sass
 
+## 3º Passo - para fazer o css
 ### Abrir o terminal e escrever:
 sass --watch styles/index.scss styles/index.css
 
