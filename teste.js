@@ -1,34 +1,25 @@
 /*-----------------------------------------------------------------------------------------------
-ESTE CODIGO ERA SO EXEMPLO MAS TA TODO CRAZY - apagar e esta a ser refeito no resultadosFilmes.js
+ESTE CODIGO ERA SO EXEMPLO MAS TA TODO CRAZY - apagar e esta a ser refeito no graficoGBO.js
 -----------------------------------------------------------------------------------------------*/
-
-//this is to work with the csv file Não esquecer a pastaaaa
+//this is to work with the csv file -> Não esquecer a pastaaaa
 d3.csv("dados/dadosFilmes.csv").then(function(data) {
+
+    console.log(data, d => d.Year);
 
     //É preciso converter os nossos valores para somar ent tipo 102,78 para 102.78
     data.forEach(d => {
-        d.Gross = parseFloat(d["Gross Box Office"].replace(",", "."));
-        d.Year = +d.Year;
+        d.GBO = parseFloat(d["Gross Box Office"].replace(",", ".")); //GBO para Gross Box Office
     });
 
-    // Group totals by year
-    let totals = d3.rollups(
-        data,
-        v => d3.sum(v, d => d.Gross),
-        d => d.Year
-    );
+    //Agrupar o total por ano. https://observablehq.com/@d3/d3-group
+    let total = d3.rollups(data, v => d3.sum(v, d => d.GBO), d => d.Year); //v para value??? check no d3
 
-    // Convert rollup to array of objects sorted by year
-    const dataset = totals
+    //Convert rollup to array of objects sorted by year
+    const dataset = total
         .map(d => ({ year: d[0], totalGross: d[1] }))
-        .sort((a, b) => a.year - b.year);
 
-    console.log(dataset);
 
-    // --------------------------------
-    // --------- CHART CODE -----------
-    // --------------------------------
-
+//Parte da construção do gráfico
     var svg = d3.select("svg"),
         margin = 200,
         width = svg.attr("width") - margin,
