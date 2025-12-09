@@ -6,25 +6,41 @@
 }
 body {
   background-color: #292929;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: lexend;
 }
-body h1 {
+body header {
+  height: 100vh;
+}
+body header h1 {
   font-family: limelight;
-  color: whitesmoke;
+  text-align: center;
+  width: 1200px;
+  font-size: 80pt;
 }
-body p {
-  color: whitesmoke;
+body header p {
+  width: 1200px;
+  color: red;
 }
-
-footer p {
-  color: white;
+body main {
+  width: 1200px;
+}
+body main #grafLinhasEspectadores p {
+  color: red;
+  width: 500px;
+}
+body footer p {
   font-family: lexend;
   text-align: center;
 }
-footer p:first-child {
+body footer p:first-child {
   font-weight: 100;
   font-size: 10pt;
 }
-footer p:nth-child(2) {
+body footer p:nth-child(2) {
   font-weight: 200;
   font-size: 10pt;
 }

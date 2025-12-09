@@ -8,30 +8,54 @@
 
 body {
   background-color: #292929;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: lexend;
 
-  h1 {
-    font-family: limelight;
-    color: whitesmoke;
-  }
-
-  p {
-    color: whitesmoke;
-  }
-}
-
-footer {
-  p {
-    color: white;
-    font-family: lexend;
+  header {
+    height: 100vh;
+    h1 {
+      font-family: limelight;
       text-align: center;
 
-    &:first-child {
-      font-weight: 100;
-      font-size: 10pt;
+      width: 1200px;
+      //height:100vh;
+      font-size: 80pt;
     }
-    &:nth-child(2) {
-      font-weight: 200;
-      font-size: 10pt;
+    p {
+      width: 1200px;
+      color: red;
+    }
+  }
+
+  main {
+    width: 1200px;
+
+    #grafLinhasEspectadores {
+      p {
+          color: red;
+          width: 500px;
+        
+        
+      }
+    }
+  }
+
+  footer {
+    p {
+      font-family: lexend;
+      text-align: center;
+
+      &:first-child {
+        font-weight: 100;
+        font-size: 10pt;
+      }
+      &:nth-child(2) {
+        font-weight: 200;
+        font-size: 10pt;
+      }
     }
   }
 }
