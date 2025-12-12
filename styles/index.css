@@ -1,6 +1,8 @@
 @font-face {
   font-family: limelight;
   src: url("/fonts/Limelight-Regular.ttf");
+}
+@font-face {
   font-family: lexend;
   src: url("/fonts/Lexend-VariableFont_wght.ttf");
 }
