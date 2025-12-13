@@ -34,6 +34,13 @@ body main #grafLinhasEspectadores p {
   color: red;
   width: 500px;
 }
+body main #grafAdmissoesPorGenero {
+  margin-top: 100px;
+}
+body main #grafAdmissoesPorGenero p {
+  color: red;
+  width: 500px;
+}
 body footer p {
   font-family: lexend;
   text-align: center;
