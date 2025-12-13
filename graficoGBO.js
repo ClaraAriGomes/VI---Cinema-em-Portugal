@@ -1,17 +1,17 @@
-//ADICIONAR TITULOS AOS EIXOS
-//LIMPAR CODIGO XXXXXXXXXXXXXXXXXXXXXXXXXx
+//LIMPAR CODIGO XXXXXXXXXXXXXXXXXXXXXXXXX
 //VER INTERATIVIDADE
-//REDUZIR NUMEROS PARA 80
 //adicionar interatividade com ver os numeros e maybe se clicar top filmes desse ano???
+//adicionar comewntario de recaida grande devido a pandemia
+//adicionar tooltip
+//adicionar animacao aos pontos
 let svg;
 let canvasHeight, canvasWidth, padding, graphWidth, graphHeight;
 let dadosGBO;
 
-
 window.onload = function () {
   //graph general attributes
   canvasHeight = 650;
-  canvasWidth = 1000;
+  canvasWidth = 1280; //Manter este tamanho para os gráficos
   padding = 100;
   graphWidth = canvasWidth - padding * 2;
   graphHeight = canvasHeight - padding * 2;
@@ -19,9 +19,20 @@ window.onload = function () {
   //variável pros nossos dados neste gráfico
   dadosGBO = "/dados/dadosFilmes.csv";
 
+  //TOOLTIP DA AULA
+  //create a tooltip, so later we make it visible with the data information
+  d3.select("#grafLinhasReceitas")
+    .append("div")
+    .style("opacity", "0") // it's hidden
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("position", "absolute")
+    .style("border", "solid")
+    .style("padding", "2px");
+
   //pôr o svg do graph no main nesta div especifica
   svg = d3
-    .select("#grafLinhasEspectadores")
+    .select("#grafLinhasReceitas")
     .append("svg")
     .attr("width", canvasWidth)
     .attr("height", canvasHeight);
@@ -36,24 +47,28 @@ window.onload = function () {
   }).then(rollups);
 };
 
-
-
-//trabalhar mais a partir daqui arrumar codigo
-
 function rollups(data) {
   //agrupar com rollups o gbo por ano (rollups para somar)
-  let total = d3.rollups(data,(v) => d3.sum(v, (d) => d.gbo),(d) => d.year
+  let total = d3.rollups(
+    data,
+    (v) => d3.sum(v, (d) => d.gbo),
+    (d) => d.year
   );
 
   //console.log(total);
 
-  let dataset = total.map((d) => ({ year: d[0], totalGross: d[1]}));
+  let dataset = total.map((d) => ({ year: d[0], totalGross: d[1] }));
 
+  draw_graph(dataset);
+}
+
+//FUNCAO PARA DESENHAR COISAS SÓ
+function draw_graph(dataset) {
   let chart = svg
     .append("g")
     .attr("transform", `translate(${padding}, ${padding})`);
 
-  //Add X axis
+  //============ X axis ============
   let x = d3
     .scaleLinear()
     .domain(d3.extent(dataset, (d) => d.year))
@@ -69,11 +84,11 @@ function rollups(data) {
     .append("text")
     .style("text-anchor", "start")
     .style("fill", "white")
-    .attr("x", graphWidth)
-    .attr("y", graphHeight)
-    .text("YEAR");
+    .attr("x", graphWidth - 15)
+    .attr("y", graphHeight + 40)
+    .text("Ano");
 
-  // Add Y axis
+  //============ Y axis ============
   let y = d3
     .scaleLinear()
     .domain([0, d3.max(dataset, (d) => d.totalGross)])
@@ -85,14 +100,12 @@ function rollups(data) {
     .append("text")
     .style("text-anchor", "end")
     .style("fill", "white")
-    .attr("x", 0)
-    .attr("y", 0)
+    .attr("x", 65)
+    .attr("y", -20)
     .text("GBO em milhões");
 
-
-
   // Add the line
-  chart
+  const path = chart
     .append("path")
     .datum(dataset)
     .attr("fill", "none")
@@ -105,6 +118,90 @@ function rollups(data) {
         .x((d) => x(d.year))
         .y((d) => y(d.totalGross))
     );
-}
 
-function draw_graph() {}
+  const totalLength = path.node().getTotalLength(); //o node é para tipo apanhar o primeiro ponto
+
+  //aqui brincar com o path
+  path
+    .attr("stroke-dasharray", totalLength + " " + totalLength)
+    .attr("stroke-dashoffset", totalLength)
+    .transition()
+    .duration(2000)
+    .ease(d3.easeQuadInOut)
+    .attr("stroke-dashoffset", 0);
+
+
+
+  //========PONTOS AO LONGO DA LINHA========
+  //pontos
+  const circle = d3.symbol().type(d3.symbolCircle).size(70);
+  //estrelinhas
+  const star = d3.symbol().type(d3.symbolStar).size(170);
+
+  //assinalar pontos de cada ano
+  chart
+    .selectAll(".dots")
+    .data(dataset)
+    .join((enter) => enter.append("path"))
+    .attr("d", circle)
+    .attr("transform", (d) => `translate(${x(d.year)}, ${y(d.totalGross)})`) //.attr("cx", d => x(d.year))
+    .attr("fill", "rgba(120, 176, 231, 1)");
+
+
+  //assinalar ano máximo
+  const max = d3.greatest(dataset, (d) => d.totalGross);
+
+  chart
+    .append("path")
+    .attr("d", star)
+    .attr("fill", "rgba(246, 254, 0, 1)")
+    .attr("transform", `translate(${x(max.year)}, ${y(max.totalGross)})`); //.attr("cx", d => x(d.year))
+
+  
+  //Animação dos pontos
+  
+
+
+
+  //========Tooltip========
+  //tooltip da aula
+  const tooltip = d3.select(".tooltip");
+
+  /*
+
+
+chart.selectAll(".dot")
+  .data(dataset)
+  .enter()
+  .append("circle")
+  .attr("class", "dot")
+  .attr("cx", d => x(d.year))
+  .attr("cy", d => y(d.totalGross))
+  .attr("r", 4)
+  .attr("fill", "rgba(120, 176, 231, 1)")
+  .on("mouseover", function (e, d) {
+    d3.select(this)
+      .attr("r", 6)
+      .attr("fill", "orange");
+
+    tooltip
+      .style("opacity", 1)
+      .html(
+        `<strong>${d.year}</strong><br/>
+         ${d.totalGross.toFixed(1)} M`
+      );
+  })
+  .on("mousemove", function (e) {
+    tooltip
+      .style("left", (e.pageX + 10) + "px")
+      .style("top", (e.pageY - 10) + "px");
+  })
+  .on("mouseout", function () {
+    d3.select(this)
+      .attr("r", 4)
+      .attr("fill", "rgba(120, 176, 231, 1)");
+
+    tooltip.style("opacity", 0);
+  });
+*/
+}
