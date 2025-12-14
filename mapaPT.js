@@ -125,7 +125,9 @@ function drawRegion(features, tx, ty, className) {
     .on("mouseout", () => tooltip.style("opacity", 0));
 }
 
-/* ---------------- Update Map ---------------- */
+//=============================
+//            UpdateMap
+//=============================
 
 function updateMap(year) {
   const data = admissionsByYear.get(year) || new Map();
@@ -192,6 +194,7 @@ function addSlider() {
     .append("text")
     .attr("y", -15)
     .attr("text-anchor", "middle")
+    .attr("fill","white")
     .text(years[0]);
 
   handle.call(
@@ -226,7 +229,7 @@ function addLegend() {
   const g = svg.append("g")
     .attr(
       "transform",
-      `translate(${canvas.width - legendWidth-40}, ${canvas.height - 50})`
+      `translate(${canvas.width - legendWidth - 40}, ${canvas.height - 50})`
     );
 
   /* ---------- Color blocks ---------- */
@@ -242,19 +245,22 @@ function addLegend() {
     .attr("height", legendHeight)
     .attr("fill", d => d);
 
-  /* ---------- Axis (ticks centered) ---------- */
-  const steps = [10000, 20000, 50000 , 500000, 2000000, 2000000, 3000000, 6000000];
+  /* ---------- Axis (ticks centered on blocks) ---------- */
+const steps = [1000, 10000, 20000, 50000 , 200000, 500000, 2000000, 3000000, 6000000];
 
-  const scale = d3.scaleLinear()
-    .domain([0, 6000000])
+  // pixel positions for ticks: center of each block
+  const tickPositions = Array.from({length: steps.length}, (_, i) => i * blockWidth);
+
+  const axisScale = d3.scaleLinear()
+    .domain([0, legendWidth])
     .range([0, legendWidth]);
 
   g.append("g")
     .attr("transform", `translate(0, ${legendHeight})`)
     .call(
-      d3.axisBottom(d3.scaleLinear().domain([0, steps.length]).range([0, legendWidth]))
-        .tickValues(d3.range(steps.length))
-        .tickFormat(i => steps[i])
+      d3.axisBottom(axisScale)
+        .tickValues(tickPositions)
+        .tickFormat((d, i) => steps[i])
         .tickSize(legendHeight)
     )
     .select(".domain")
