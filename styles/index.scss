@@ -26,12 +26,15 @@ body {
       width: 1200px;
       //height:100vh;
       font-size: 80pt;
+      position: relative;
+      top: 50px;
     }
 
     p {
       width: 932px;
       color: red;
       position: relative;
+      top: 30px;
       left: 125px;
       text-align: justify;
     }

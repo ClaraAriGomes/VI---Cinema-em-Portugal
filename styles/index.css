@@ -22,11 +22,14 @@ body header h1 {
   text-align: center;
   width: 1200px;
   font-size: 80pt;
+  position: relative;
+  top: 50px;
 }
 body header p {
   width: 932px;
   color: red;
   position: relative;
+  top: 30px;
   left: 125px;
   text-align: justify;
 }
