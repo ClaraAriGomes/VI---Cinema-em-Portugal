@@ -28,9 +28,18 @@ body header p {
 body main {
   width: 1200px;
 }
-body main #grafLinhasReceitasTexto p {
+body main h2 {
+  font-size: 30px;
+  font-family: limelight;
+}
+body main p {
   color: red;
   width: 500px;
+}
+body main #grafEspectadoresLocalTexto p:nth-child(3), body main #grafLinhasReceitasTexto p:nth-child(3) {
+  font-weight: 100;
+  font-size: 9pt;
+  color: white;
 }
 body main #grafLinhasReceitas {
   display: flex;
@@ -44,7 +53,6 @@ body footer {
   justify-content: end;
 }
 body footer p {
-  font-family: lexend;
   text-align: center;
 }
 body footer p:first-child {

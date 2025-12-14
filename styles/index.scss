@@ -32,11 +32,24 @@ body {
 
   main {
     width: 1200px;
+    h2{
+      font-size:30px;
+      font-family: limelight;
+    }
 
-    #grafLinhasReceitasTexto {
-      p {
+
+    p{
         color: red;
         width: 500px;
+    }
+
+    #grafEspectadoresLocalTexto, #grafLinhasReceitasTexto {
+      p {
+        &:nth-child(3) {
+          font-weight: 100;
+          font-size: 9pt;
+          color:white;
+        }
       }
     }
 
@@ -51,9 +64,8 @@ body {
     height: 300px;
     display: flex;
     flex-direction: column;
-    justify-content:end;
+    justify-content: end;
     p {
-      font-family: lexend;
       text-align: center;
 
       &:first-child {
