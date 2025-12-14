@@ -24,8 +24,11 @@ body header h1 {
   font-size: 80pt;
 }
 body header p {
-  width: 1200px;
+  width: 932px;
   color: red;
+  position: relative;
+  left: 125px;
+  text-align: justify;
 }
 body main {
   width: 1200px;
@@ -70,9 +73,6 @@ body main #grafAdmissoesPorGenero p {
 body main #grafAdmissoesPorGenero {
   margin-top: 100px;
   margin-bottom: 100px;
-  /* hide native circle */
-  /* hide scrollbar track by default */
-  /* dhow scrollbar only while scrolling */
 }
 body main #grafAdmissoesPorGenero p {
   color: red;
@@ -89,6 +89,9 @@ body main #grafAdmissoesPorGenero #radioForm {
 body main #grafAdmissoesPorGenero #radioForm label {
   margin-right: 10px;
   font-size: 12pt;
+}
+body main #grafAdmissoesPorGenero {
+  /* hide native circle */
 }
 body main #grafAdmissoesPorGenero input[type=radio] {
   display: none;
@@ -117,9 +120,15 @@ body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer {
   position: relative;
   scrollbar-gutter: stable;
 }
+body main #grafAdmissoesPorGenero {
+  /* hide scrollbar track by default */
+}
 body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer::-webkit-scrollbar {
   width: 0px;
   height: 0px;
+}
+body main #grafAdmissoesPorGenero {
+  /* dhow scrollbar only while scrolling */
 }
 body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer:hover::-webkit-scrollbar {
   width: 8px;
