@@ -47,8 +47,6 @@ body main #grafLinhasReceitasTexto p:nth-child(3) {
 }
 body main .chart {
   min-height: 700px;
-}
-body main .chart #grafLinhasReceitas {
   display: flex;
   flex-direction: column;
   align-items: center;
