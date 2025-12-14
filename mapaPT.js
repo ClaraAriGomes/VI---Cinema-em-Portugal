@@ -28,12 +28,12 @@ function draw_map(data) {
 
   //pegar só no continente
   const mainland = data.features.filter(
-    (d) => !["Azores", "Madeira"].includes(d.properties.NAME_1)
+    (d) => !["Açores", "Madeira"].includes(d.properties.NAME_1)
   );
 
   //pegar só nas ilhas
   const islands = data.features.filter((d) =>
-    ["Azores", "Madeira"].includes(d.properties.NAME_1)
+    ["Açores", "Madeira"].includes(d.properties.NAME_1)
   );
 
   // new svg element
