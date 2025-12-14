@@ -25,10 +25,10 @@ window.onload = function () {
     .append("div")
     .style("opacity", "0") // it's hidden
     .attr("class", "tooltip")
-    .style("background-color", "white")
+    .style("background-color", "#292929")
     .style("position", "absolute")
-    .style("border", "solid")
-    .style("padding", "2px");
+    .style("padding", "10px")
+    .style("display", "none");
 
   //pôr o svg do graph no main nesta div especifica
   svg = d3
@@ -62,6 +62,8 @@ function rollups(data) {
   draw_graph(dataset);
 }
 
+
+
 //FUNCAO PARA DESENHAR COISAS SÓ
 function draw_graph(dataset) {
   let chart = svg
@@ -77,14 +79,15 @@ function draw_graph(dataset) {
   chart
     .append("g") // g é um elemento do svg para agrupar elementos
     .attr("transform", `translate(0, ${graphHeight})`)
-    .call(d3.axisBottom(x).ticks(21).tickFormat(d3.format("d")));
+    .call(d3.axisBottom(x).ticks(21).tickFormat(d3.format("d")))
+    .style("font-size", "12px");
 
   //texto do Eixo X
   chart
     .append("text")
-    .style("text-anchor", "start")
+    .style("text-anchor", "middle")
     .style("fill", "white")
-    .attr("x", graphWidth - 15)
+    .attr("x", graphWidth / 2)
     .attr("y", graphHeight + 40)
     .text("Ano");
 
@@ -93,16 +96,18 @@ function draw_graph(dataset) {
     .scaleLinear()
     .domain([0, d3.max(dataset, (d) => d.totalGross)])
     .range([graphHeight, 0]);
-  chart.append("g").call(d3.axisLeft(y));
+
+  chart.append("g").call(d3.axisLeft(y)).style("font-size", "12px");
 
   //texto do Eixo Y
   chart
     .append("text")
-    .style("text-anchor", "end")
+    .style("text-anchor", "middle")
     .style("fill", "white")
-    .attr("x", 65)
-    .attr("y", -20)
-    .text("GBO em milhões");
+    .attr("x", -graphHeight / 2)
+    .attr("y", -50)
+    .attr("transform", "rotate(-90)")
+    .text("Receita total ( milhões € )");
 
   // Add the line
   const path = chart
@@ -130,78 +135,123 @@ function draw_graph(dataset) {
     .ease(d3.easeQuadInOut)
     .attr("stroke-dashoffset", 0);
 
-
-
   //========PONTOS AO LONGO DA LINHA========
   //pontos
   const circle = d3.symbol().type(d3.symbolCircle).size(70);
-  //estrelinhas
+  //estrelinha
   const star = d3.symbol().type(d3.symbolStar).size(170);
 
-  //assinalar pontos de cada ano
+  //===============TOOLTIP==================
+  const tooltip = d3.select(".tooltip");
+
+  //PONTOS DE CADA ANO
   chart
     .selectAll(".dots")
     .data(dataset)
     .join((enter) => enter.append("path"))
     .attr("d", circle)
-    .attr("transform", (d) => `translate(${x(d.year)}, ${y(d.totalGross)})`) //.attr("cx", d => x(d.year))
-    .attr("fill", "rgba(120, 176, 231, 1)");
+    .attr("transform", (d) => `translate(${x(d.year)}, ${y(d.totalGross)})`)
+    .attr("fill", "rgba(194, 221, 248, 1)")
+    .style("cursor", "pointer")
 
+    //======Eventos Tooltip(fazer antes das animações)==========
+    .on("mouseover", function (event, d) {
+      d3.select(this)
+        .transition()
+        .duration(200)
+        .attr("d", d3.symbol().type(d3.symbolCircle).size(500));
 
-  //assinalar ano máximo
+      tooltip
+        .html(
+          `${d.year}<br/>
+         ${d.totalGross.toFixed(1)} M €`
+        )
+        .style("opacity", 0)
+        .transition()
+        .duration(500)
+        .style("opacity", 1)
+        .style("display", "block");
+    })
+
+    .on("mouseout", function (event) {
+      d3.select(this)
+        .transition()
+        .duration(500)
+        .attr("d", d3.symbol().type(d3.symbolCircle).size(70));
+      tooltip.style("opacity", 0).style("display", "none");
+    })
+
+    .on("mousemove", function (event) {
+      tooltip
+        .style("left", event.pageX + 10 + "px")
+        .style("top", event.pageY - 28 + "px");
+    })
+
+    //======Animações dos pontos======
+    .attr("opacity", 0)
+    .transition()
+    .delay(2100)
+    .attr("opacity", 1);
+
+  //ESTRELINHA MÁXIMA
   const max = d3.greatest(dataset, (d) => d.totalGross);
 
-  chart
+  const starPath = chart
     .append("path")
     .attr("d", star)
     .attr("fill", "rgba(246, 254, 0, 1)")
-    .attr("transform", `translate(${x(max.year)}, ${y(max.totalGross)})`); //.attr("cx", d => x(d.year))
+    .attr("transform", `translate(${x(max.year)}, ${y(max.totalGross)})`)
+    .style("cursor", "pointer")
+    .attr("opacity", 0);
 
-  
-  //Animação dos pontos
-  
+  // animação (depois da linha)
+  starPath.transition().delay(2600).duration(500).attr("opacity", 1);
 
+  starPath
+    .on("mouseover", function (event) {
+      d3.select(this)
+        .transition()
+        .duration(200)
+        .attr("d", d3.symbol().type(d3.symbolStar).size(400));
 
+      tooltip
+        .html(
+          `<strong>Ano com maior receita</strong><br/>
+         ${max.year}<br/>
+         ${max.totalGross.toFixed(1)} M €`
+        )
+        .style("opacity", 0)
+        .style("display", "block")
+        .transition()
+        .duration(300)
+        .style("opacity", 1);
+    })
 
-  //========Tooltip========
-  //tooltip da aula
-  const tooltip = d3.select(".tooltip");
+    .on("mouseout", function () {
+      d3.select(this).transition().duration(300).attr("d", star);
 
-  /*
+      tooltip.style("opacity", 0).style("display", "none");
+    })
 
+    .on("mousemove", function (event) {
+      tooltip
+        .style("left", event.pageX + 10 + "px")
+        .style("top", event.pageY - 28 + "px");
+    });
 
-chart.selectAll(".dot")
-  .data(dataset)
-  .enter()
-  .append("circle")
-  .attr("class", "dot")
-  .attr("cx", d => x(d.year))
-  .attr("cy", d => y(d.totalGross))
-  .attr("r", 4)
-  .attr("fill", "rgba(120, 176, 231, 1)")
-  .on("mouseover", function (e, d) {
-    d3.select(this)
-      .attr("r", 6)
-      .attr("fill", "orange");
-
-    tooltip
-      .style("opacity", 1)
-      .html(
-        `<strong>${d.year}</strong><br/>
-         ${d.totalGross.toFixed(1)} M`
-      );
-  })
-  .on("mousemove", function (e) {
-    tooltip
-      .style("left", (e.pageX + 10) + "px")
-      .style("top", (e.pageY - 10) + "px");
-  })
-  .on("mouseout", function () {
-    d3.select(this)
-      .attr("r", 4)
-      .attr("fill", "rgba(120, 176, 231, 1)");
-
-    tooltip.style("opacity", 0);
-  });
-*/
+  chart
+    .append("text")
+    .style("text-anchor", "middle")
+    .style("fill", "white")
+    .attr("x", x(2020))
+    .attr("y", y(10))
+    .text("Pandemia COVID-19")
+    .style(
+      "font-family",
+      "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"
+    )
+    .attr("opacity", 0)
+    .transition()
+    .delay(1200)
+    .attr("opacity", 1);
 }

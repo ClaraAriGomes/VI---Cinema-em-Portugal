@@ -33,7 +33,7 @@ body {
   main {
     width: 1200px;
 
-    #grafLinhasReceitasTexto{
+    #grafLinhasReceitasTexto {
       p {
         color: red;
         width: 500px;
@@ -48,6 +48,10 @@ body {
   }
 
   footer {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content:end;
     p {
       font-family: lexend;
       text-align: center;
