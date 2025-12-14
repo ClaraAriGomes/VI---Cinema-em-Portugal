@@ -36,10 +36,66 @@ body main #grafLinhasEspectadores p {
 }
 body main #grafAdmissoesPorGenero {
   margin-top: 100px;
+  margin-bottom: 100px;
 }
 body main #grafAdmissoesPorGenero p {
   color: red;
   width: 500px;
+}
+body main #grafAdmissoesPorGenero #radioForm {
+  margin-bottom: 50px;
+}
+body main #grafAdmissoesPorGenero #radioForm label {
+  margin-right: 10px;
+  font-size: 12pt;
+}
+body main #grafAdmissoesPorGenero {
+  /* hide native circle */
+}
+body main #grafAdmissoesPorGenero input[type=radio] {
+  display: none;
+}
+body main #grafAdmissoesPorGenero .radio-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 12px;
+  background-color: #353535;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+body main #grafAdmissoesPorGenero .radio-btn:hover {
+  background-color: #3f3f3f;
+}
+body main #grafAdmissoesPorGenero .radio-btn:has(input[type=radio]:checked) {
+  background-color: #202020;
+  color: white;
+}
+body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer {
+  height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  scrollbar-gutter: stable;
+}
+body main #grafAdmissoesPorGenero {
+  /* hide scrollbar track by default */
+}
+body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+body main #grafAdmissoesPorGenero {
+  /* dhow scrollbar only while scrolling */
+}
+body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer:hover::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer::-webkit-scrollbar-thumb {
+  background-color: red;
+  border-radius: 4px;
 }
 body footer p {
   font-family: lexend;

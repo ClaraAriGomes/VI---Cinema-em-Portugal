@@ -18,6 +18,7 @@ body {
 
   header {
     height: 100vh;
+
     h1 {
       font-family: limelight;
       text-align: center;
@@ -26,6 +27,7 @@ body {
       //height:100vh;
       font-size: 80pt;
     }
+
     p {
       width: 1200px;
       color: red;
@@ -37,19 +39,80 @@ body {
 
     #grafLinhasEspectadores {
       p {
-          color: red;
-          width: 500px;
-        
-        
+        color: red;
+        width: 500px;
+
+
       }
     }
 
     #grafAdmissoesPorGenero {
       margin-top: 100px;
+      margin-bottom: 100px;
 
       p {
         color: red;
         width: 500px;
+      }
+
+      #radioForm {
+        margin-bottom: 50px;
+      }
+
+      #radioForm label {
+        margin-right: 10px;
+        font-size: 12pt;
+      }
+
+      /* hide native circle */
+      input[type="radio"] {
+        display: none;
+      }
+
+      .radio-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 12px;
+        background-color: #353535;
+        color: #ccc;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .radio-btn:hover {
+        background-color: #3f3f3f;
+      }
+
+      .radio-btn:has(input[type="radio"]:checked) {
+        background-color: #202020;
+        color: white;
+      }
+
+      #grafAdmissoesPorGeneroContainer {
+        height: 600px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+        scrollbar-gutter: stable;
+      }
+
+      /* hide scrollbar track by default */
+      #grafAdmissoesPorGeneroContainer::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+      }
+
+      /* dhow scrollbar only while scrolling */
+      #grafAdmissoesPorGeneroContainer:hover::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+
+      #grafAdmissoesPorGeneroContainer::-webkit-scrollbar-thumb {
+        background-color: red;
+        border-radius: 4px;
       }
     }
   }
@@ -63,6 +126,7 @@ body {
         font-weight: 100;
         font-size: 10pt;
       }
+
       &:nth-child(2) {
         font-weight: 200;
         font-size: 10pt;
