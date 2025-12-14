@@ -189,7 +189,11 @@ function drawDetailedGraph() {
         // actually move the axis ("sticky")
         chartGroup.node().appendChild(xAxisGroup.node());
 
-        seatHover(chartGroup.selectAll("rect"), seatWidth, seatHeight, chartGroup);
+        const tooltipOverlay = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip");
+
+        seatHover(chartGroup.selectAll("rect"), seatWidth, seatHeight, chartGroup, tooltipOverlay);
     });
 }
 
@@ -318,34 +322,46 @@ function drawCompactGraph() {
         printthing.forEach(g => console.log(g));
         */
 
-        seatHover(chartGroup.selectAll("rect"), seatWidth, seatHeight, chartGroup);
+        const tooltipOverlay = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip");
+
+        seatHover(chartGroup.selectAll("rect"), seatWidth, seatHeight, chartGroup, tooltipOverlay);
     });
 }
 
-function seatHover(selection, seatWidth, seatHeight, chartGroup) {
+function seatHover(selection, seatWidth, seatHeight, chartGroup, tooltipOverlay) {
     selection
         .on("mouseover", function (event, d) {
             const x = +d3.select(this).attr("x");
             const y = +d3.select(this).attr("y");
 
+            tooltipOverlay
+                .style("opacity", 1)
+                .html(`<p>Admissões: ${d.admissions.toLocaleString()}</p>`)
+                .style("left", (event.pageX + 100) + "px")
+                .style("top", (event.pageY - 28) + "px");
+
             // draw two crossing lines
             d3.select(this.parentNode).append("line")
                 .attr("class", "hover-x")
+                .attr("pointer-events", "none")
                 .attr("x1", x + 10)
                 .attr("y1", y + 6)
                 .attr("x2", x + seatWidth - 10)
                 .attr("y2", y + seatHeight - 6)
-                .attr("stroke", "blue")
+                .attr("stroke", "#002357ff")
                 .attr("stroke-width", 4)
                 .attr("stroke-linecap", "round");
 
             d3.select(this.parentNode).append("line")
                 .attr("class", "hover-x")
+                .attr("pointer-events", "none")
                 .attr("x1", x + seatWidth - 10)
                 .attr("y1", y + 6)
                 .attr("x2", x + 10)
                 .attr("y2", y + seatHeight - 6)
-                .attr("stroke", "blue")
+                .attr("stroke", "#002357ff")
                 .attr("stroke-width", 4)
                 .attr("stroke-linecap", "round");
 
@@ -359,6 +375,13 @@ function seatHover(selection, seatWidth, seatHeight, chartGroup) {
                 .style("fill", "red");
 
         })
+        .on("mousemove", function (event, d) {
+            // Move tooltip with mouse
+            tooltipOverlay
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+
         .on("mouseout", function (event, d) {
             d3.select(this.parentNode).selectAll(".hover-x").remove();
 
@@ -371,5 +394,7 @@ function seatHover(selection, seatWidth, seatHeight, chartGroup) {
                 .filter(t => t === d.genre)
                 .style("fill", "whitesmoke");
 
+            // hide tooltip
+            tooltipOverlay.style("opacity", 0);
         });
 }

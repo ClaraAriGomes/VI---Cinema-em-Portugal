@@ -97,6 +97,21 @@ body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer::-webkit-scro
   background-color: red;
   border-radius: 4px;
 }
+body .tooltip {
+  position: absolute;
+  background: #353535;
+  width: fit-content;
+  height: auto;
+  padding: 10px;
+  margin-top: 40px;
+  margin-left: 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
 body footer p {
   font-family: lexend;
   text-align: center;

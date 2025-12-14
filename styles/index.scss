@@ -95,6 +95,8 @@ body {
         overflow-x: hidden;
         position: relative;
         scrollbar-gutter: stable;
+
+
       }
 
       /* hide scrollbar track by default */
@@ -115,6 +117,22 @@ body {
         border-radius: 4px;
       }
     }
+  }
+
+  .tooltip {
+    position: absolute;
+    background: #353535;
+    width: fit-content;
+    height: auto;
+    padding: 10px;
+    margin-top:40px;
+    margin-left: 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
 
   footer {
