@@ -5,22 +5,39 @@ const portugalMap = "dados/portugal_mapa_concelhos.geojson";
 
 
 export function graph1() {
-  d3.json(portugalMap).then(draw_map);
+  Promise.all([
+    d3.json(portugalMap),
+    d3.csv("/dados/dadosLocal.csv", d3.autoType)
+  ]).then(([mapData, csvData]) => {
+    dadosLocal = csvData;
+    draw_map(mapData);
+    updateMap(2004); // initial year
+  });
 
-   //graph general attributes
-   canvasHeight = 700;
-   canvasWidth = 1280; //Manter este tamanho para os gráficos
-   padding = 60;
-   graphWidth = canvasWidth - padding * 2;
-   graphHeight = canvasHeight - padding * 2;
-
-   //variáveis para os nossos dados neste gráfico
-  dadosLocal = "/dados/dadosLocal.csv";
+  canvasHeight = 700;
+  canvasWidth = 1280;
+  padding = 60;
+  graphWidth = canvasWidth - padding * 2;
+  graphHeight = canvasHeight - padding * 2;
 }
 
 
 
+const colorScale = d3.scaleThreshold()
+  .domain([1000, 5000, 10000, 50000, 100000, 500000])
+  .range(d3.schemeBlues[7]);
 
+function getAdmissionsByDistrict(year) {
+  const filtered = dadosLocal.filter(d => d.Year === year);
+
+  const rolled = d3.rollup(
+    filtered,
+    v => d3.sum(v, d => d.Admissions),
+    d => d.District
+  );
+
+  return rolled; // Map: District → Admissions
+}
 
 
 //FUNCAO PARA DESENHAR COISAS SÓ
@@ -68,20 +85,20 @@ svg = d3
     .attr("transform", "translate(550, 50)"); // move right
 
   //CORES E TAL
-  gMainland
-    .selectAll(".mainland")
-    .data(mainland)
-    .enter()
-    .append("path")
-    .attr("class", "mainland")
-    .attr("d", pathprojectionMainland)
-    .attr("fill", "#008364ff")
-    .attr("stroke", "white")
-    .attr("stroke-width", 0.5);
+gMainland
+  .selectAll(".mainland")
+  .data(mainland)
+  .enter()
+  .append("path")
+  .attr("class", "mainland")
+  .attr("d", pathprojectionMainland)
+  .attr("stroke", "white")
+  .attr("stroke-width", 0.5);
 
   const gIslands = svg
     .append("g")
     .attr("transform", "translate(-290, 50)"); // move left
+    
   gIslands
     .selectAll(".islands")
     .data(islands)
@@ -104,4 +121,17 @@ svg = d3
         .attr("stroke", "white")
         .attr("stroke-width", 0.5);
         */
+}
+
+function updateMap(year) {
+  const admissionsMap = getAdmissionsByDistrict(year);
+
+  svg.selectAll(".mainland")
+    .transition()
+    .duration(500)
+    .attr("fill", d => {
+      const name = d.properties.NAME_1; // municipality name in GeoJSON
+      const value = admissionsMap.get(name) || 0;
+      return value === 0 ? "#eee" : colorScale(value);
+    });
 }
