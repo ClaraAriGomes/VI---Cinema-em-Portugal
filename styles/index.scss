@@ -35,19 +35,47 @@ body {
   main {
     width: 1200px;
 
-    #grafLinhasEspectadores {
+    #SeccaoGrafMapa{
+      height:1000px;
+    }
+
+
+    h2 {
+      font-size: 30px;
+      font-family: limelight;
+    }
+
+    p {
+      color: red;
+      width: 500px;
+    }
+
+    #grafEspectadoresLocalTexto,
+    #grafLinhasReceitasTexto {
       p {
-          color: red;
-          width: 500px;
-        
-        
+        &:nth-child(3) {
+          font-weight: 100;
+          font-size: 9pt;
+          color: white;
+        }
       }
+    }
+    .chart {
+      min-height: 700px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      
     }
   }
 
   footer {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
     p {
-      font-family: lexend;
       text-align: center;
 
       &:first-child {
