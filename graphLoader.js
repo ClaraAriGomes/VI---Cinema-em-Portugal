@@ -24,9 +24,3 @@ const observer = new IntersectionObserver(
 );
 
 observer.observe(target);
-/*
-document.addEventListener("DOMContentLoaded", () => {
-  graph1();
-  graph2();
-});
-*/
