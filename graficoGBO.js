@@ -1,11 +1,12 @@
+
 //LIMPAR CODIGO XXXXXXXXXXXXXXXXXXXXXXXXX
 //VER INTERATIVIDADE
 //adicionar interatividade com ver os numeros e maybe se clicar top filmes desse ano???
 let svg;
 let canvasHeight, canvasWidth, padding, graphWidth, graphHeight;
 let dadosGBO;
-
-window.onload = function () {
+export function graph2(){
+//window.addEventListener("load", function() {
   //graph general attributes
   canvasHeight = 650;
   canvasWidth = 1280; //Manter este tamanho para os gráficos
@@ -42,7 +43,8 @@ window.onload = function () {
       gbo: parseFloat(d["Gross Box Office"].replace(",", ".")) / 1000000,
     };
   }).then(rollups);
-};
+
+//});
 
 function rollups(data) {
   //agrupar com rollups o gbo por ano (rollups para somar)
@@ -250,4 +252,13 @@ function draw_graph(dataset) {
     .transition()
     .delay(1200)
     .attr("opacity", 1);
+}
+
+
+
+
+
+
+
+
 }

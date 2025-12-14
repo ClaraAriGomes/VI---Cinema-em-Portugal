@@ -32,31 +32,40 @@ body {
 
   main {
     width: 1200px;
-    h2{
-      font-size:30px;
+
+    #SeccaoGrafMapa{
+      height:1000px;
+    }
+
+
+    h2 {
+      font-size: 30px;
       font-family: limelight;
     }
 
-
-    p{
-        color: red;
-        width: 500px;
+    p {
+      color: red;
+      width: 500px;
     }
 
-    #grafEspectadoresLocalTexto, #grafLinhasReceitasTexto {
+    #grafEspectadoresLocalTexto,
+    #grafLinhasReceitasTexto {
       p {
         &:nth-child(3) {
           font-weight: 100;
           font-size: 9pt;
-          color:white;
+          color: white;
         }
       }
     }
+    .chart {
+      min-height: 700px;
 
-    #grafLinhasReceitas {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      #grafLinhasReceitas {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
     }
   }
 

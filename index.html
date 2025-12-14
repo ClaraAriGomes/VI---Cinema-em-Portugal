@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <script type="text/javascript" src="https://d3js.org/d3.v6.min.js"></script>
-    <script type="text/javascript" src="graficoGBO.js"></script>
+    <script type="module" src="graphLoader.js"></script>
 
     <link rel="stylesheet" href="styles/index.css" />
 
@@ -40,32 +40,29 @@
 
     <main>
       <!-----GRÁFICO RELATIVO AOS ESPECTADORES POR REGIAO----->
-      <div id="grafEspectadoresLocalTexto">
-        <h2>Espectadores por ano</h2>
-
-        <p>
-          Este gráfico permite analizar a distribuição de espectadores por
-          Portugal ao longo de vários anos
-        </p>
-        
-        <!-- Data dos dados dos "dadosLocal"-->
-        <p>Dados atualizados a: 01/09/2025</p>
+      <div id="SeccaoGrafMapa">
+        <div id="grafEspectadoresLocalTexto">
+          <h2>Espectadores por ano</h2>
+          <p>
+            Este gráfico permite analizar a distribuição de espectadores por
+            Portugal ao longo de vários anos
+          </p>
+          <!-- Data dos dados dos "dadosLocal"-->
+          <p>Dados atualizados a: 01/09/2025</p>
+        </div>
+        <div id="grafEspectadoresLocal" class="chart"></div>
       </div>
-      <div id="grafEspectadoresLocal"></div>
-
-
 
       <!-----GRÁFICO RELATIVO ÁS RECEITAS POR ANO----->
-      <div id="grafLinhasReceitasTexto">
-        <h2>Receitas por ano</h2>
-
-        <p>Este gráfico permite analizar as receitas por ano.</p>
-        <!-- Data dos dados dos "dadosFilmes"-->
-        <p>Dados atualizados a: 06/11/2025</p>
+      <div id="SeccaoGrafLinhas">
+        <div id="grafLinhasReceitasTexto">
+          <h2>Receitas por ano</h2>
+          <p>Este gráfico permite analizar as receitas por ano.</p>
+          <!-- Data dos dados dos "dadosFilmes"-->
+          <p>Dados atualizados a: 06/11/2025</p>
+        </div>
+        <div id="grafLinhasReceitas" class="chart"></div>
       </div>
-      <div id="grafLinhasReceitas"></div>
-
-      <!--<svg width="900" height="600"></svg>-->
     </main>
 
     <footer>
@@ -75,6 +72,8 @@
       </p>
       <p>
         Projecto realizado em âmbito da disciplina de Visualização de Informação
+        <br />
+        por Catarina Araújo e Clara Gomes
       </p>
     </footer>
   </body>
