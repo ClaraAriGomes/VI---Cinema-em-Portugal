@@ -13,12 +13,12 @@ imgCurtainsBottom.style.width = '100%';
 imgCurtainsTop.style.position = 'fixed';
 imgCurtainsTop.style.top = '-100px';
 imgCurtainsTop.style.left = '0';
-imgCurtainsTop.style.zIndex = '9999';
+imgCurtainsTop.style.zIndex = '-9';
 
 imgCurtainsBottom.style.position = 'fixed';
 imgCurtainsBottom.style.top = '-50px';
 imgCurtainsBottom.style.left = '0';
-imgCurtainsBottom.style.zIndex = '9999';
+imgCurtainsBottom.style.zIndex = '-9';
 
 // Append to body
 document.body.appendChild(imgCurtainsBottom);

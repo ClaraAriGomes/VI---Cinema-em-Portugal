@@ -44,17 +44,18 @@ function graficoPPA() {
             countries.map(([country, admissions]) => ({ year, country, admissions }))
         );
 
-
         svgPPA = d3.select("#grafPaisesPorAno")
             .append("svg")
             .attr("width", canvasWidthPPA)
             .attr("height", canvasHeightPPA);
 
+
+
+
         // extract values for each axis
         const years = [...new Set(groupedData.map(d => d.year))].sort(d3.ascending);
         const maxAdmissions = d3.max(groupedData, d => d.admissions);
         const countries = d3.groups(groupedData, d => d.country);
-
 
         // X AXIS
         const yearExtent = d3.extent(years);
@@ -62,18 +63,6 @@ function graficoPPA() {
             .domain([yearExtent[0] - 0.5, yearExtent[1] + 0.5]) // extend by 1 year on each side
             .range([0, graphWidthPPA]);
 
-        // Y AXIS
-        const yAxis = d3.scaleLinear()
-            .domain([0, 16000000])   // extend domain to the next "round" number
-            .range([graphHeightPPA, 0]);
-
-
-
-
-
-
-
-        // Axes
         svgPPA.append("g")
             .attr("transform", `translate(${paddingPPA}, ${graphHeightPPA + paddingPPA})`)
             .call(
@@ -82,6 +71,10 @@ function graficoPPA() {
                     .tickValues(years)   // or filter years if too many
             );
 
+        // Y AXIS
+        const yAxis = d3.scaleLinear()
+            .domain([0, 16000000])   // extend domain to the next "round" number
+            .range([graphHeightPPA, 0]);
 
         svgPPA.append("g")
             .attr("transform", `translate(${paddingPPA}, ${paddingPPA})`)
@@ -90,7 +83,8 @@ function graficoPPA() {
 
 
 
-        // Line generator
+
+        // create the lines
         const line = d3.line()
             .x(d => xAxis(d.year) + paddingPPA)
             .y(d => yAxis(d.admissions) + paddingPPA);
@@ -109,25 +103,27 @@ function graficoPPA() {
                 .attr("d", line);
         });
 
-        // Create a tooltip text element (hidden by default)
-        const tooltipGroup = svgPPA.append("g")
+        //create overlay for hoovering a line
+        const lineOverlay = svgPPA.append("g")
             .attr("id", "lineTooltip")
             .style("visibility", "hidden");
 
-        const tooltipRect = tooltipGroup.append("rect")
+        // just the background
+        const overlayBg = lineOverlay.append("rect")
             .attr("fill", "#353535")
-            .attr("rx", 4) // rounded corners
+            .attr("rx", 4)
             .attr("ry", 4)
             .attr("opacity", 0.8);
 
-        const tooltipText = tooltipGroup.append("text")
+        const overlayText = lineOverlay.append("text")
             .style("font-size", "14px")
             .style("font-family", "Lexend")
             .style("fill", "whitesmoke")
-            .attr("x", 5) // padding inside rect
+            .attr("x", 5)
             .attr("y", 15);
 
 
+        // color scheme
         countries.forEach(([country, values], i) => {
             const color = d3.schemeReds[9][i % 9];
             const lineClass = "line-" + country.replace(/\s+/g, "_");
@@ -139,6 +135,8 @@ function graficoPPA() {
                 .attr("stroke-width", 2)
                 .attr("class", lineClass)
                 .attr("d", line)
+
+                // INTERACTION FOR WHEN U HOVER A LINE -------------------------------
                 .on("mouseover", function () {
                     // bring line to front
                     d3.select(this)
@@ -147,21 +145,20 @@ function graficoPPA() {
                         .attr("stroke-width", 5)
                         .attr("stroke", "orange");
 
-                    tooltipText.text(country);
+                    overlayText.text(country);
 
                     // measure text size
-                    const bbox = tooltipText.node().getBBox();
-                    tooltipRect
-                        .attr("x", bbox.x - 4)
-                        .attr("y", bbox.y - 2)
-                        .attr("width", bbox.width + 8)
-                        .attr("height", bbox.height + 4);
+                    overlayBg
+                        .attr("x", 0 - 8)
+                        .attr("y", 0 - 4)
+                        .attr("width", 100 + 8 * 2)   // fixed width
+                        .attr("height", 20 + 4 * 2);
 
-                    tooltipGroup.style("visibility", "visible");
+                    lineOverlay.style("visibility", "visible");
                 })
                 .on("mousemove", function (event) {
-                    // move group with mouse
-                    tooltipGroup.attr("transform", `translate(${event.offsetX + 10}, ${event.offsetY - 10})`);
+                    // move label with mouse
+                    lineOverlay.attr("transform", `translate(${event.offsetX + 10}, ${event.offsetY - 10})`);
                 })
                 .on("mouseout", function () {
                     d3.select(this)
@@ -169,23 +166,25 @@ function graficoPPA() {
                         .attr("stroke-width", 2)
                         .attr("stroke", color);
 
-                    tooltipGroup.style("visibility", "hidden");
+                    lineOverlay.style("visibility", "hidden");
                 });
         });
 
 
 
 
+        // ------------- FILTERING MENU SECTION -------------- //
 
 
-        // --- Menu Section with Toggle ---
-        const filterWrapper = d3.select("#grafPaisesPorAno")
+
+        // create the menu
+        const filterMenu = d3.select("#grafPaisesPorAno")
             .append("div")
-            .attr("id", "filterWrapper")
+            .attr("id", "filterMenu")
             .style("margin-top", "20px");
 
-        // Toggle button
-        const toggleButton = filterWrapper.append("button")
+        // toggle button
+        const toggleButton = filterMenu.append("button")
             .text("Show Filter")
             .style("padding", "6px 12px")
             .style("border", "none")
@@ -195,8 +194,8 @@ function graficoPPA() {
             .style("background", "#353535")
             .style("cursor", "pointer");
 
-        // Menu container (hidden by default)
-        const menuContainer = filterWrapper.append("div")
+        // the actual menu
+        const menuContainer = filterMenu.append("div")
             .attr("id", "menuContainer")
             .style("margin-top", "10px")
             .style("padding", "12px")
@@ -212,7 +211,7 @@ function graficoPPA() {
             .style("display", "block")
             .style("margin-bottom", "8px");
 
-        // Scrollable list of checkboxes
+        // ccrollable list of checkboxes
         const list = menuContainer.append("div")
             .style("max-height", "200px")
             .style("overflow-y", "auto")
@@ -221,8 +220,8 @@ function graficoPPA() {
             .style("gap", "5px");
 
         countries.forEach(([country], i) => {
-            const color = d3.schemeReds[9][i % 9];
-            const lineClass = ".line-" + country.replace(/\s+/g, "_");
+            const color = d3.schemeReds[9][i % 9]; // 9 colors in the scheme preset
+            const lineClass = ".line-" + country.replace(/\s+/g, "_"); // this makes a class for each country line
 
             const item = list.append("label")
                 .style("display", "flex")
@@ -231,10 +230,15 @@ function graficoPPA() {
 
             item.append("input")
                 .attr("type", "checkbox")
-                .attr("checked", true)
+                .property("checked", true)
                 .on("change", function () {
-                    d3.select(lineClass)
-                        .style("display", this.checked ? null : "none");
+                    const checked = this.checked;
+
+                    if (checked) {
+                        d3.selectAll(lineClass).style("display", null);   // show
+                    } else {
+                        d3.selectAll(lineClass).style("display", "none"); // hide
+                    }
                 });
 
             item.append("span")
@@ -244,7 +248,7 @@ function graficoPPA() {
                 .text(country);
         });
 
-        // Buttons for bulk actions
+        // buttons for selecting all or none
         const buttonContainer = menuContainer.append("div")
             .style("margin-top", "10px")
             .style("display", "flex")
@@ -276,11 +280,23 @@ function graficoPPA() {
                 list.selectAll("input").property("checked", false).dispatch("change");
             });
 
-        // Toggle logic
+        // toggle logic
         toggleButton.on("click", function () {
-            const isHidden = menuContainer.style("display") === "none";
-            menuContainer.style("display", isHidden ? "block" : "none");
-            toggleButton.text(isHidden ? "Hide Filter" : "Show Filter");
+            let isHidden;
+
+            if (menuContainer.style("display") == "none") {
+                isHidden = true;
+            } else {
+                isHidden = false;
+            }
+
+            if (isHidden) {
+                menuContainer.style("display", "block");
+                toggleButton.text("Hide Filter");
+            } else {
+                menuContainer.style("display", "none");
+                toggleButton.text("Show Filter");
+            }
         });
     });
 }

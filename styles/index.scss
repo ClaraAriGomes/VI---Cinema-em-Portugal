@@ -37,8 +37,8 @@ body {
   main {
     width: 1200px;
 
-    #SeccaoGrafMapa{
-      height:1000px;
+    #SeccaoGrafMapa {
+      height: 1000px;
     }
 
 
@@ -62,21 +62,23 @@ body {
         }
       }
     }
+
     .chart {
       min-height: 700px;
 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
     }
+
     .chart {
       min-height: 700px;
 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
     }
 
     #grafAdmissoesPorGenero {
@@ -84,10 +86,10 @@ body {
       margin-bottom: 100px;
 
       p {
-          color: red;
-          width: 500px;
-        
-        
+        color: red;
+        width: 500px;
+
+
       }
     }
 
@@ -98,6 +100,12 @@ body {
       p {
         color: red;
         width: 500px;
+      }
+
+      p:nth-child(3) {
+        font-weight: 100;
+        font-size: 9pt;
+        color: white;
       }
 
       #radioForm {
@@ -162,6 +170,21 @@ body {
         border-radius: 4px;
       }
     }
+
+    #grafPaisesPorAno {
+      margin-bottom: 100px;
+
+      p {
+        color: red;
+        width: 500px;
+      }
+
+      p:nth-child(3) {
+        font-weight: 100;
+        font-size: 9pt;
+        color: white;
+      }
+    }
   }
 
   .tooltip {
@@ -170,7 +193,7 @@ body {
     width: fit-content;
     height: auto;
     padding: 10px;
-    margin-top:40px;
+    margin-top: 40px;
     margin-left: 10px;
     border-radius: 12px;
     font-size: 12px;
@@ -180,11 +203,13 @@ body {
     transition: opacity 0.2s ease;
   }
 
+
   footer {
     height: 300px;
     display: flex;
     flex-direction: column;
     justify-content: end;
+
     p {
       text-align: center;
 

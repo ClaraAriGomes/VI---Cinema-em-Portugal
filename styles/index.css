@@ -75,6 +75,11 @@ body main #grafAdmissoesPorGenero p {
   color: red;
   width: 500px;
 }
+body main #grafAdmissoesPorGenero p:nth-child(3) {
+  font-weight: 100;
+  font-size: 9pt;
+  color: white;
+}
 body main #grafAdmissoesPorGenero #radioForm {
   margin-bottom: 50px;
 }
@@ -129,6 +134,18 @@ body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer:hover::-webki
 body main #grafAdmissoesPorGenero #grafAdmissoesPorGeneroContainer::-webkit-scrollbar-thumb {
   background-color: red;
   border-radius: 4px;
+}
+body main #grafPaisesPorAno {
+  margin-bottom: 100px;
+}
+body main #grafPaisesPorAno p {
+  color: red;
+  width: 500px;
+}
+body main #grafPaisesPorAno p:nth-child(3) {
+  font-weight: 100;
+  font-size: 9pt;
+  color: white;
 }
 body .tooltip {
   position: absolute;
