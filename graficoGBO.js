@@ -1,9 +1,6 @@
 //LIMPAR CODIGO XXXXXXXXXXXXXXXXXXXXXXXXX
 //VER INTERATIVIDADE
 //adicionar interatividade com ver os numeros e maybe se clicar top filmes desse ano???
-//adicionar comewntario de recaida grande devido a pandemia
-//adicionar tooltip
-//adicionar animacao aos pontos
 let svg;
 let canvasHeight, canvasWidth, padding, graphWidth, graphHeight;
 let dadosGBO;
@@ -61,7 +58,6 @@ function rollups(data) {
 
   draw_graph(dataset);
 }
-
 
 
 //FUNCAO PARA DESENHAR COISAS SÓ
